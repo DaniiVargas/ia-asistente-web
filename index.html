@@ -4,263 +4,393 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IA: avances, magia y tu asistente</title>
+  <meta name="description" content="Resumen visual de avances en IA + demo interactiva + guía para configurar tu asistente." />
   <style>
     :root {
-      --bg: #f7f9ff;
-      --card: #ffffff;
-      --text: #1d2438;
-      --muted: #5f6882;
-      --accent: #4f46e5;
-      --accent-soft: #eef0ff;
-      --ok: #0ea5a3;
-      --border: #e5e9f5;
-      --shadow: 0 10px 30px rgba(38, 51, 120, 0.08);
-      --radius: 16px;
+      --bg: #0b1020;
+      --bg-soft: #111933;
+      --panel: rgba(255,255,255,0.06);
+      --panel-strong: rgba(255,255,255,0.09);
+      --text: #edf1ff;
+      --muted: #b2bddf;
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --border: rgba(255,255,255,0.14);
+      --radius-lg: 22px;
+      --radius-md: 14px;
+      --shadow: 0 18px 45px rgba(3, 8, 24, 0.35);
     }
 
     * { box-sizing: border-box; }
 
+    html { scroll-behavior: smooth; }
+
     body {
       margin: 0;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      background: linear-gradient(180deg, #f9fbff 0%, #f3f6ff 100%);
-      line-height: 1.6;
+      background:
+        radial-gradient(circle at 5% 0%, #22326d 0%, transparent 36%),
+        radial-gradient(circle at 95% 10%, #402a7d 0%, transparent 30%),
+        linear-gradient(180deg, #0b1020 0%, #0a1228 100%);
+      line-height: 1.58;
     }
 
     .container {
-      max-width: 1080px;
+      width: min(1120px, 92vw);
       margin: 0 auto;
-      padding: 0 18px 48px;
+      padding-bottom: 56px;
     }
 
-    header {
-      text-align: center;
-      padding: 44px 0 20px;
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(10, 16, 34, 0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .topbar-inner {
+      width: min(1120px, 92vw);
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: .2px;
+      color: #dbe8ff;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: .92rem;
+      font-weight: 600;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      transition: transform .15s ease, background .2s ease;
+    }
+
+    .nav a:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,0.09);
+    }
+
+    header.hero {
+      padding: 44px 0 28px;
+    }
+
+    .hero-box {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(155deg, rgba(125,211,252,.10), rgba(167,139,250,.08) 50%, rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding: 28px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(125,211,252,.18);
+      color: #bceeff;
+      border: 1px solid rgba(125,211,252,.3);
+      border-radius: 999px;
+      padding: 6px 11px;
+      font-size: .8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+      font-size: clamp(2rem, 3.6vw, 3.1rem);
+      line-height: 1.1;
       letter-spacing: -0.02em;
     }
 
     .sub {
-      margin: 10px auto 0;
+      margin: 12px 0 0;
+      max-width: 760px;
       color: var(--muted);
-      max-width: 700px;
+      font-size: 1.03rem;
     }
 
-    .quick-nav {
+    .stats {
+      margin-top: 18px;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
       gap: 10px;
-      margin: 18px 0 24px;
     }
 
-    .quick-nav a {
-      text-decoration: none;
-      background: var(--card);
+    .stat {
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 10px 12px;
-      color: var(--text);
-      box-shadow: var(--shadow);
-      font-weight: 600;
-      transition: transform .15s ease, box-shadow .2s ease;
+      padding: 10px;
+      background: rgba(255,255,255,0.04);
     }
 
-    .quick-nav a:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(38, 51, 120, 0.14);
-    }
+    .stat strong { display: block; font-size: 1.08rem; }
+    .stat span { color: var(--muted); font-size: .9rem; }
 
     section {
-      background: var(--card);
+      margin-top: 20px;
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 22px;
-      margin: 16px 0;
+      border-radius: var(--radius-lg);
+      background: var(--panel);
       box-shadow: var(--shadow);
+      padding: 24px;
     }
 
-    .label {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--accent-soft);
-      padding: 6px 10px;
-      border-radius: 999px;
+    .section-title {
+      margin: 0 0 10px;
+      font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+    }
+
+    .section-tag {
+      display: inline-block;
       margin-bottom: 10px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: .8rem;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,.05);
+      color: #dbe6ff;
     }
 
-    h2 { margin: 2px 0 12px; }
-
-    ul {
-      margin: 10px 0 0;
-      padding-left: 20px;
+    .points {
+      display: grid;
+      gap: 12px;
+      margin-top: 10px;
     }
 
-    li { margin-bottom: 8px; }
+    .point {
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+    }
 
-    .demo {
+    .point strong { color: #e9f2ff; }
+
+    .demo-wrap {
+      margin-top: 12px;
       display: grid;
       gap: 10px;
-      margin-top: 12px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
     }
 
     input, button {
       width: 100%;
-      font: inherit;
-      padding: 12px 14px;
       border-radius: 12px;
-      border: 1px solid var(--border);
-      outline: none;
+      border: 1px solid rgba(255,255,255,0.17);
+      background: rgba(6, 10, 22, 0.8);
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
     }
 
+    input::placeholder { color: #91a0ce; }
+
     input:focus {
-      border-color: #a4afff;
-      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+      outline: none;
+      border-color: rgba(125,211,252,0.9);
+      box-shadow: 0 0 0 4px rgba(125,211,252,0.17);
     }
 
     button {
+      background: linear-gradient(90deg, #38bdf8, #8b5cf6);
+      color: #081225;
       border: none;
+      font-weight: 800;
       cursor: pointer;
-      font-weight: 700;
-      color: #fff;
-      background: linear-gradient(90deg, #4f46e5, #7c3aed);
-      transition: filter .15s ease;
+      min-width: 250px;
     }
 
-    button:hover { filter: brightness(1.05); }
+    button:hover { filter: brightness(1.08); }
 
     #output {
-      border: 1px dashed #b8c2ea;
+      border: 1px dashed rgba(216,228,255,.4);
       border-radius: 12px;
-      min-height: 110px;
       padding: 14px;
+      min-height: 120px;
       white-space: pre-wrap;
-      background: #fbfcff;
+      background: rgba(2, 6, 18, .45);
     }
 
-    .grid {
+    .tips {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(52, 211, 153, .35);
+      color: #bafbe6;
+      background: rgba(52, 211, 153, .10);
+      font-size: .94rem;
+    }
+
+    .cards {
       display: grid;
       gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      margin-top: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      margin-top: 8px;
     }
 
     .card {
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
-      background: #fff;
+      border-radius: 14px;
+      padding: 13px;
+      background: var(--panel-strong);
     }
 
-    .card strong {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1rem;
     }
 
-    .hint {
-      margin-top: 12px;
-      font-size: 0.95rem;
+    .card p {
+      margin: 0;
       color: var(--muted);
-      background: #f8faff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
+      font-size: .95rem;
     }
 
-    footer {
+    .footer {
       text-align: center;
-      color: var(--muted);
+      color: #8f9cc8;
+      margin-top: 22px;
       font-size: .9rem;
-      padding: 16px 0 8px;
     }
 
-    .ok {
-      color: var(--ok);
-      font-weight: 700;
+    @media (max-width: 760px) {
+      .topbar-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .nav { justify-content: flex-start; }
+
+      .row {
+        grid-template-columns: 1fr;
+      }
+
+      button { min-width: unset; }
+
+      section, .hero-box { padding: 18px; }
     }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">IA Demo • versión más pro</div>
+      <nav class="nav" aria-label="navegación principal">
+        <a href="#avances">Avances</a>
+        <a href="#demo">Demo</a>
+        <a href="#config">Configurar asistente</a>
+      </nav>
+    </div>
+  </div>
+
   <div class="container">
-    <header>
-      <h1>IA en acción: clara, útil y amigable</h1>
-      <p class="sub">Ahora la página está más simple de recorrer, más legible y con una demo más guiada para cualquier persona.</p>
+    <header class="hero">
+      <div class="hero-box">
+        <span class="kicker">Presentación rápida y visual</span>
+        <h1>IA en acción: avances, magia y asistentes</h1>
+        <p class="sub">Una página más bonita y más usable para explicar lo importante sin fricción: qué cambió en IA, una demo que impacta y cómo parametrizar tu asistente sin tecnicismos.</p>
+
+        <div class="stats">
+          <div class="stat"><strong>3 bloques</strong><span>listos para presentar</span></div>
+          <div class="stat"><strong>1 demo</strong><span>interactiva y rápida</span></div>
+          <div class="stat"><strong>6 pasos</strong><span>de configuración útil</span></div>
+          <div class="stat"><strong>100%</strong><span>frontend estático</span></div>
+        </div>
+      </div>
     </header>
 
-    <nav class="quick-nav" aria-label="Navegación rápida">
-      <a href="#avances">1) Avances recientes</a>
-      <a href="#demo">2) Demo sorprendente</a>
-      <a href="#config">3) Configura tu asistente</a>
-    </nav>
-
     <section id="avances">
-      <span class="label">I • Últimos 3–4 años</span>
-      <h2>Avances más relevantes en IA (2022–2026)</h2>
-      <ul>
-        <li><strong>Multimodal real:</strong> texto, imagen, audio y video en una misma conversación.</li>
-        <li><strong>Copilotos de trabajo:</strong> productividad real en código, análisis, marketing y operaciones.</li>
-        <li><strong>Mejor razonamiento:</strong> más capacidad para tareas complejas de varios pasos.</li>
-        <li><strong>Eficiencia:</strong> mayor calidad con menor costo y menor latencia.</li>
-        <li><strong>Automatización con agentes:</strong> IA que ejecuta tareas con reglas y herramientas.</li>
-      </ul>
-      <p class="hint">Tip rápido: si quieres presentar esto, usa esta sección como contexto y pasa a la demo para impacto.</p>
+      <span class="section-tag">I. Últimos 3–4 años</span>
+      <h2 class="section-title">Avances más relevantes en IA (2022–2026)</h2>
+
+      <div class="points">
+        <div class="point"><strong>Modelos multimodales:</strong> texto, imagen, audio y video en un solo flujo.</div>
+        <div class="point"><strong>Copilotos de trabajo:</strong> productividad tangible en tareas reales de negocio.</div>
+        <div class="point"><strong>Razonamiento mejorado:</strong> resolución de problemas multi-paso más sólida.</div>
+        <div class="point"><strong>Eficiencia y costos:</strong> mayor calidad con menor latencia y menor costo.</div>
+        <div class="point"><strong>Agentes con herramientas:</strong> ya no solo responden, también ejecutan.</div>
+      </div>
     </section>
 
     <section id="demo">
-      <span class="label">II • Algo sorprendente</span>
-      <h2>Demo: convierte una idea simple en una estrategia creativa</h2>
-      <p>Escribe una idea (ej. “cafetería de barrio”) y genera una propuesta en 3 capas: producto, experiencia y crecimiento.</p>
+      <span class="section-tag">II. Algo sorprendente</span>
+      <h2 class="section-title">Demo: de una idea simple a una estrategia creativa</h2>
+      <p style="margin:0;color:var(--muted)">Escribe una idea, toca el botón y obtén una propuesta en 3 capas: producto, experiencia y crecimiento.</p>
 
-      <div class="demo">
-        <input id="idea" placeholder="Ej: librería independiente, clínica dental, app de productividad" />
-        <button id="run">Generar propuesta</button>
+      <div class="demo-wrap">
+        <div class="row">
+          <input id="idea" placeholder="Ej: cafetería de barrio, clínica dental, app de productividad" />
+          <button id="run">Generar propuesta</button>
+        </div>
         <div id="output">Aquí aparecerá la propuesta ✨</div>
       </div>
 
-      <p class="hint"><span class="ok">✔ Sugerencia:</span> prueba 2 o 3 ideas distintas para comparar enfoques en menos de 1 minuto.</p>
+      <div class="tips">Tip: compara 2-3 ideas distintas para evaluar rápidamente cuál tiene más potencial de diferenciación.</div>
     </section>
 
     <section id="config">
-      <span class="label">III • Parametrizar tu asistente</span>
-      <h2>Cómo configurarla fácil (sin tecnicismos)</h2>
-      <div class="grid">
-        <div class="card">
-          <strong>1) Rol claro</strong>
-          <p>“Actúa como asistente ejecutiva para priorización y decisiones rápidas”.</p>
-        </div>
-        <div class="card">
-          <strong>2) Estilo de respuesta</strong>
-          <p>Define tono, idioma, formato y nivel de síntesis.</p>
-        </div>
-        <div class="card">
-          <strong>3) Límites</strong>
-          <p>Qué puede hacer sola y qué requiere aprobación.</p>
-        </div>
-        <div class="card">
-          <strong>4) Contexto fijo</strong>
-          <p>Objetivos, prioridades, métricas y criterios de decisión.</p>
-        </div>
-        <div class="card">
-          <strong>5) Memoria útil</strong>
-          <p>Qué recordar siempre y por cuánto tiempo.</p>
-        </div>
-        <div class="card">
-          <strong>6) Mejora continua</strong>
-          <p>Revisión semanal: qué funcionó y qué ajustar.</p>
-        </div>
+      <span class="section-tag">III. Parametrizar tu asistente IA</span>
+      <h2 class="section-title">Cómo configurarla fácil (sin tecnicismos)</h2>
+
+      <div class="cards">
+        <article class="card">
+          <h3>1) Define el rol</h3>
+          <p>Ejemplo: asistente ejecutiva para priorización, seguimiento y decisiones.</p>
+        </article>
+        <article class="card">
+          <h3>2) Define el estilo</h3>
+          <p>Tono, idioma, longitud, estructura y cuándo ser más directa.</p>
+        </article>
+        <article class="card">
+          <h3>3) Define límites</h3>
+          <p>Qué puede automatizar sola y qué necesita aprobación explícita.</p>
+        </article>
+        <article class="card">
+          <h3>4) Define contexto fijo</h3>
+          <p>Objetivos, prioridades, métricas y criterio para tomar decisiones.</p>
+        </article>
+        <article class="card">
+          <h3>5) Define memoria útil</h3>
+          <p>Qué debe recordar siempre y qué debe olvidar con el tiempo.</p>
+        </article>
+        <article class="card">
+          <h3>6) Revisa y mejora</h3>
+          <p>Ajusta semanalmente según resultados y retroalimentación real.</p>
+        </article>
       </div>
     </section>
 
-    <footer>Hecho para pruebas de conexión con GitHub + GitHub Pages.</footer>
+    <p class="footer">Hecho para pruebas de conexión con GitHub + GitHub Pages.</p>
   </div>
 
   <script>
