@@ -6,158 +6,262 @@
   <title>IA: avances, magia y tu asistente</title>
   <style>
     :root {
-      --bg: #0b1020;
-      --card: #121a31;
-      --text: #e8ecff;
-      --muted: #aeb8e6;
-      --accent: #7ae3ff;
-      --accent2: #b08cff;
+      --bg: #f7f9ff;
+      --card: #ffffff;
+      --text: #1d2438;
+      --muted: #5f6882;
+      --accent: #4f46e5;
+      --accent-soft: #eef0ff;
+      --ok: #0ea5a3;
+      --border: #e5e9f5;
+      --shadow: 0 10px 30px rgba(38, 51, 120, 0.08);
+      --radius: 16px;
     }
+
     * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color: var(--text);
-      background: radial-gradient(circle at 20% 0%, #1a2250 0%, var(--bg) 40%);
-      line-height: 1.55;
+      background: linear-gradient(180deg, #f9fbff 0%, #f3f6ff 100%);
+      line-height: 1.6;
     }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 18px 48px;
+    }
+
     header {
-      padding: 56px 20px 22px;
       text-align: center;
+      padding: 44px 0 20px;
     }
-    h1 { margin: 0; font-size: clamp(1.8rem, 3.8vw, 3rem); }
-    .sub { color: var(--muted); margin-top: 10px; }
-    .wrap { max-width: 1050px; margin: 0 auto; padding: 0 18px 50px; }
-    section {
-      background: linear-gradient(170deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      padding: 24px;
-      margin: 22px 0;
-      backdrop-filter: blur(6px);
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.9rem, 3.8vw, 2.8rem);
+      letter-spacing: -0.02em;
     }
-    h2 { margin-top: 0; font-size: 1.4rem; }
-    ul { margin-bottom: 0; }
-    li { margin-bottom: 10px; }
-    .pill {
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(122,227,255,0.15);
-      color: var(--accent);
-      font-size: 0.8rem;
-      margin-bottom: 8px;
+
+    .sub {
+      margin: 10px auto 0;
+      color: var(--muted);
+      max-width: 700px;
+    }
+
+    .quick-nav {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 10px;
+      margin: 18px 0 24px;
+    }
+
+    .quick-nav a {
+      text-decoration: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 12px;
+      color: var(--text);
+      box-shadow: var(--shadow);
       font-weight: 600;
+      transition: transform .15s ease, box-shadow .2s ease;
     }
+
+    .quick-nav a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(38, 51, 120, 0.14);
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      margin: 16px 0;
+      box-shadow: var(--shadow);
+    }
+
+    .label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-soft);
+      padding: 6px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    h2 { margin: 2px 0 12px; }
+
+    ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    li { margin-bottom: 8px; }
+
     .demo {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-top: 10px;
+      gap: 10px;
+      margin-top: 12px;
     }
-    textarea, input, button {
+
+    input, button {
       width: 100%;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.16);
-      background: rgba(9,13,27,0.8);
-      color: var(--text);
-      padding: 12px;
       font: inherit;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      outline: none;
     }
+
+    input:focus {
+      border-color: #a4afff;
+      box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+    }
+
     button {
+      border: none;
       cursor: pointer;
       font-weight: 700;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      color: #0c1227;
-      border: none;
+      color: #fff;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed);
+      transition: filter .15s ease;
     }
+
     button:hover { filter: brightness(1.05); }
+
     #output {
+      border: 1px dashed #b8c2ea;
       border-radius: 12px;
-      border: 1px dashed rgba(255,255,255,0.2);
+      min-height: 110px;
       padding: 14px;
-      min-height: 96px;
       white-space: pre-wrap;
-      background: rgba(0,0,0,0.2);
+      background: #fbfcff;
     }
+
     .grid {
       display: grid;
       gap: 12px;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      margin-top: 10px;
     }
+
     .card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 12px;
+      background: #fff;
     }
-    footer { text-align: center; color: var(--muted); padding: 8px 16px 34px; font-size: 0.9rem; }
+
+    .card strong {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hint {
+      margin-top: 12px;
+      font-size: 0.95rem;
+      color: var(--muted);
+      background: #f8faff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: .9rem;
+      padding: 16px 0 8px;
+    }
+
+    .ok {
+      color: var(--ok);
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <h1>IA en acción: avances, magia y asistentes</h1>
-    <p class="sub">Un resumen rápido + mini demo interactiva</p>
-  </header>
+  <div class="container">
+    <header>
+      <h1>IA en acción: clara, útil y amigable</h1>
+      <p class="sub">Ahora la página está más simple de recorrer, más legible y con una demo más guiada para cualquier persona.</p>
+    </header>
 
-  <main class="wrap">
-    <section>
-      <span class="pill">I. Últimos 3–4 años</span>
+    <nav class="quick-nav" aria-label="Navegación rápida">
+      <a href="#avances">1) Avances recientes</a>
+      <a href="#demo">2) Demo sorprendente</a>
+      <a href="#config">3) Configura tu asistente</a>
+    </nav>
+
+    <section id="avances">
+      <span class="label">I • Últimos 3–4 años</span>
       <h2>Avances más relevantes en IA (2022–2026)</h2>
       <ul>
-        <li><strong>Modelos multimodales:</strong> ahora una IA puede entender texto, imagen, audio y video en un mismo flujo.</li>
-        <li><strong>Copilotos en trabajo real:</strong> programación, análisis, marketing, soporte y operaciones acelerados con asistentes especializados.</li>
-        <li><strong>Razonamiento y planificación:</strong> mejoras fuertes en tareas multi-paso y resolución de problemas complejos.</li>
-        <li><strong>Modelos más eficientes:</strong> mayor calidad con menos costo (cuantización, distilación, inferencia optimizada).</li>
-        <li><strong>Agentes y automatización:</strong> IA que no solo responde, también ejecuta tareas con herramientas y reglas.</li>
+        <li><strong>Multimodal real:</strong> texto, imagen, audio y video en una misma conversación.</li>
+        <li><strong>Copilotos de trabajo:</strong> productividad real en código, análisis, marketing y operaciones.</li>
+        <li><strong>Mejor razonamiento:</strong> más capacidad para tareas complejas de varios pasos.</li>
+        <li><strong>Eficiencia:</strong> mayor calidad con menor costo y menor latencia.</li>
+        <li><strong>Automatización con agentes:</strong> IA que ejecuta tareas con reglas y herramientas.</li>
       </ul>
+      <p class="hint">Tip rápido: si quieres presentar esto, usa esta sección como contexto y pasa a la demo para impacto.</p>
     </section>
 
-    <section>
-      <span class="pill">II. Algo sorprendente</span>
-      <h2>Demo: de una idea simple a una estrategia creativa en segundos</h2>
-      <p>Escribe una idea (por ejemplo: “cafetería de barrio”) y esta mini IA creativa te devuelve una versión sorprendente en 3 capas: producto, experiencia y crecimiento.</p>
+    <section id="demo">
+      <span class="label">II • Algo sorprendente</span>
+      <h2>Demo: convierte una idea simple en una estrategia creativa</h2>
+      <p>Escribe una idea (ej. “cafetería de barrio”) y genera una propuesta en 3 capas: producto, experiencia y crecimiento.</p>
 
       <div class="demo">
         <input id="idea" placeholder="Ej: librería independiente, clínica dental, app de productividad" />
-        <button id="run">Generar propuesta sorprendente</button>
+        <button id="run">Generar propuesta</button>
         <div id="output">Aquí aparecerá la propuesta ✨</div>
       </div>
+
+      <p class="hint"><span class="ok">✔ Sugerencia:</span> prueba 2 o 3 ideas distintas para comparar enfoques en menos de 1 minuto.</p>
     </section>
 
-    <section>
-      <span class="pill">III. Parametrizar tu asistente IA</span>
+    <section id="config">
+      <span class="label">III • Parametrizar tu asistente</span>
       <h2>Cómo configurarla fácil (sin tecnicismos)</h2>
       <div class="grid">
         <div class="card">
-          <strong>1) Define el rol</strong>
-          <p>“Actúa como mi asistente ejecutiva para priorización, seguimiento y decisiones rápidas.”</p>
+          <strong>1) Rol claro</strong>
+          <p>“Actúa como asistente ejecutiva para priorización y decisiones rápidas”.</p>
         </div>
         <div class="card">
-          <strong>2) Define tu estilo</strong>
-          <p>Formato de respuesta, tono, idioma, nivel de detalle y cuándo ser breve o profundo.</p>
+          <strong>2) Estilo de respuesta</strong>
+          <p>Define tono, idioma, formato y nivel de síntesis.</p>
         </div>
         <div class="card">
-          <strong>3) Define límites</strong>
-          <p>Qué puede hacer sola y qué requiere tu aprobación (mensajes externos, pagos, cambios críticos).</p>
+          <strong>3) Límites</strong>
+          <p>Qué puede hacer sola y qué requiere aprobación.</p>
         </div>
         <div class="card">
-          <strong>4) Define contexto fijo</strong>
-          <p>Objetivos, prioridades de negocio, métricas clave y preferencias personales.</p>
+          <strong>4) Contexto fijo</strong>
+          <p>Objetivos, prioridades, métricas y criterios de decisión.</p>
         </div>
         <div class="card">
-          <strong>5) Define memoria útil</strong>
-          <p>Qué recordar siempre (personas, proyectos, decisiones) y por cuánto tiempo.</p>
+          <strong>5) Memoria útil</strong>
+          <p>Qué recordar siempre y por cuánto tiempo.</p>
         </div>
         <div class="card">
-          <strong>6) Revisa y mejora</strong>
-          <p>Semanalmente ajusta reglas: qué respondió bien, qué se desvió y qué automatizar después.</p>
+          <strong>6) Mejora continua</strong>
+          <p>Revisión semanal: qué funcionó y qué ajustar.</p>
         </div>
       </div>
     </section>
-  </main>
 
-  <footer>Hecho para pruebas de conexión con GitHub + GitHub Pages.</footer>
+    <footer>Hecho para pruebas de conexión con GitHub + GitHub Pages.</footer>
+  </div>
 
   <script>
     const ideaInput = document.getElementById('idea');
